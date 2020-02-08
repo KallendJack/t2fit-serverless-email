@@ -31,7 +31,7 @@ function generateError(code, err) {
 }
 
 function generateEmailParams(body) {
-  const { firstName, lastName, email, subject, message } = JSON.parse(body)
+  const { name, email, subject, message } = JSON.parse(body)
 
   return {
     Source: myEmail,
@@ -42,8 +42,7 @@ function generateEmailParams(body) {
         Text: {
           Charset: 'UTF-8',
           Data: `
-          First name: ${firstName} \n
-          Last name: ${lastName} \n
+          Name: ${name} \n
           Email: ${email} \n
           Message: ${message}`
         }
