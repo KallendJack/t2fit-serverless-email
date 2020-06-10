@@ -11,9 +11,9 @@ function generateResponse(code, payload) {
     headers: {
       'Access-Control-Allow-Origin': myDomain,
       'Access-Control-Allow-Headers': 'x-requested-with',
-      'Access-Control-Allow-Credentials': true
+      'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   }
 }
 
@@ -24,14 +24,14 @@ function generateError(code, err) {
     headers: {
       'Access-Control-Allow-Origin': myDomain,
       'Access-Control-Allow-Headers': 'x-requested-with',
-      'Access-Control-Allow-Credentials': true
+      'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(err.message)
+    body: JSON.stringify(err.message),
   }
 }
 
 function generateEmailParams(body) {
-  const { name, email, subject, message } = JSON.parse(body)
+  const { firstName, lastName, email, phone } = JSON.parse(body)
 
   return {
     Source: myEmail,
@@ -41,18 +41,18 @@ function generateEmailParams(body) {
       Body: {
         Text: {
           Charset: 'UTF-8',
-          Data: `Name: ${name} \nEmail: ${email} \nMessage: ${message}`
-        }
+          Data: `Name: ${firstName} ${lastName} \nEmail: ${email} \nPhone: ${phone}`,
+        },
       },
       Subject: {
         Charset: 'UTF-8',
-        Data: subject
-      }
-    }
+        Data: 'T2Fit - New Contact Form Submission',
+      },
+    },
   }
 }
 
-module.exports.send = async event => {
+module.exports.send = async (event) => {
   try {
     const emailParams = generateEmailParams(event.body)
     const data = await ses.sendEmail(emailParams).promise()
